@@ -25,6 +25,25 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+app.get("/api/:date?", function (req, res) {
+  let tsObj = {"unix": 0, "utc": ""};
+  let t = new Date(Date.now())
+  let time = req.params.date
+  if (req.params.date) {
+    if (!isNaN(time)) {
+      time = Number(req.params.date)
+    }
+
+    t = new Date(time)
+  }
+  tsObj.unix = t.getTime()
+  tsObj.utc = t.toUTCString()
+  if (!tsObj.unix) {
+    tsObj = {error: "invalid date"}
+  }
+  res.json(tsObj)
+  })
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
